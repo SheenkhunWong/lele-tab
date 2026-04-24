@@ -1,71 +1,170 @@
 # LeLe Tab
 
-LeLe Tab 是一个 Chrome / Firefox 新标签页浏览器扩展，按 `新标签页浏览器扩展 PRD.md` 实施。它提供暖色极简的工作台：搜索、日历、天气、待办、书签、已打开标签页和常用链接。
+A minimal, warm-toned new-tab dashboard extension for Chrome and Firefox.
 
-## 功能
+[中文文档](README.zh.md)
 
-- Manifest V3 新标签页替换，Chrome / Firefox 分别提供 manifest。
-- 亮色、暗色、跟随系统三种主题，页面加载前写入主题，减少白屏闪烁。
-- 模块卡片支持显示/隐藏、拖拽排序、`1x1` / `2x1` / `2x2` 尺寸切换。
-- 日历事件、待办、书签、归档标签页、设置均默认本地保存。
-- 书签支持 Netscape Bookmark File Format 的 HTML 导入/导出。
-- 天气使用 Open-Meteo，无 API Key；支持定位或手动城市。
-- 标签页模块可查看、搜索、切换、关闭和归档当前/所有窗口标签页。
-- Google Drive 同步使用用户自己的 Drive 路径和 `drive.file` scope。需要自行配置 OAuth Client ID。
-- 设置页同时通过新标签页右上角和扩展 options 页面访问。
-- Service Worker 监听最后一个标签页关闭场景，并按设置自动打开新标签页。
+---
 
-## 开发
+## Features
+
+| Module | Description |
+|--------|-------------|
+| **Search** | Web search with Google / Bing / DuckDuckGo / custom engine. Type `#keyword` to jump to an open tab; `!keyword` to open a bookmark. |
+| **Calendar** | Monthly view with custom events. Supports Chinese solar terms, public holidays, and bazi day column. |
+| **Weather** | Powered by [Open-Meteo](https://open-meteo.com/) — no API key required. Auto-locate or enter a city manually. Shows current conditions, hourly, and 7-day forecast. |
+| **Todos** | Lightweight task list with grouping and drag-to-reorder. |
+| **Bookmarks** | Tree-structured bookmarks with folder support. Import/export as standard Netscape HTML Bookmark Format. |
+| **Tabs** | View, search, switch, close, and archive tabs across all windows. |
+| **Quick Links** | Pinned frequent sites for one-click access. |
+
+**Appearance**
+- Light / Dark / System theme
+- 7 font choices: System, PingFang, [LXGW WenKai](https://github.com/lxgw/LxgwWenKai), Inter, Noto Sans SC, Noto Serif SC, Roboto
+- Font weight and scale controls
+- Custom background image or color
+
+**Layout**
+- Each module card supports show/hide, drag-to-reorder, and three sizes: `1×1`, `2×1`, `2×2`
+
+**Data & Sync**
+- All data is stored locally in browser storage by default
+- Optional Google Drive sync — uses only the `drive.file` scope (accesses files created by this extension only)
+- Data files synced: `bookmarks.html`, `calendar.json`, `todos.json`, `settings.json`, `archived-tabs.json`
+
+**Other**
+- Manifest V3, dual manifest for Chrome and Firefox
+- i18n: Simplified Chinese (`zh-CN`) and English (`en`)
+- Zero telemetry — no analytics, no external data collection
+
+---
+
+## Tech Stack
+
+- **Runtime**: React 19 + TypeScript 5
+- **Build**: Vite 7
+- **Icons**: Lucide React
+- **Testing**: Vitest + Testing Library
+- **Linting**: ESLint 9 + Prettier
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js ≥ 18
+- npm ≥ 9
+
+### Install dependencies
 
 ```bash
 npm install
+```
+
+### Development preview
+
+```bash
 npm run dev
 ```
 
-开发服务器用于预览页面。浏览器扩展能力需要构建后以 unpacked extension 加载。
+Opens a local dev server at `http://127.0.0.1:5173` for previewing UI. Full extension APIs (tabs, storage, etc.) require loading as an unpacked extension — see below.
 
-## 构建
+### Build
 
 ```bash
+# Chrome
 npm run build:chrome
+
+# Firefox
 npm run build:firefox
 ```
 
-Chrome 构建产物位于 `dist/`，Firefox 构建产物位于 `dist-firefox/`。
+Output directories: `dist/` (Chrome), `dist-firefox/` (Firefox).
 
-## Google Drive OAuth（开发者一次性配置）
+---
 
-用户安装后只需点击「连接 Google Drive」即可，无需任何技术操作。
+## Load as Unpacked Extension
 
-开发者发布前需在 [Google Cloud Console](https://console.cloud.google.com/) 申请两个 OAuth Client ID：
+**Chrome / Edge**
 
-**Chrome：**
-1. APIs & Services → Credentials → Create Credentials → OAuth client ID
-2. 类型选 **Chrome App**，Application ID 填扩展发布后的 Extension ID
-3. 将生成的 client_id 填入 `manifest.chrome.json` 的 `oauth2.client_id` 字段
+1. Run `npm run build:chrome`
+2. Open `chrome://extensions` → enable **Developer mode**
+3. Click **Load unpacked** → select the `dist/` folder
 
-**Firefox：**
-1. 类型选 **Web application**，Authorized redirect URIs 填 `https://oauthredirect.extensions.mozilla.org/` 并加上扩展的 redirect URI（`browser.identity.getRedirectURL('oauth2')` 的返回值）
-2. 将生成的 client_id 填入 `src/lib/drive/driveClient.ts` 的 `FIREFOX_CLIENT_ID` 常量
+**Firefox**
 
-未配置 Client ID 时，扩展仍可完整离线使用；仅 Drive 连接会提示联系开发者。
+1. Run `npm run build:firefox`
+2. Open `about:debugging#/runtime/this-firefox`
+3. Click **Load Temporary Add-on** → select `dist-firefox/manifest.json`
 
-## 验证
+---
+
+## Google Drive Sync Setup (Developer)
+
+> End users only need to click "Connect Google Drive" in Settings — no technical steps required.
+
+Drive sync is **disabled by default** and fully optional. To enable it in your own build, register OAuth credentials in [Google Cloud Console](https://console.cloud.google.com/):
+
+**Chrome**
+
+1. APIs & Services → Credentials → **Create Credentials** → OAuth client ID
+2. Application type: **Chrome App**
+3. Application ID: your extension's ID (visible on `chrome://extensions` after loading)
+4. Paste the generated `client_id` into `manifest.chrome.json` → `oauth2.client_id`
+
+**Firefox**
+
+1. Application type: **Web application**
+2. Authorized redirect URIs: add `https://oauthredirect.extensions.mozilla.org/` and the value returned by `browser.identity.getRedirectURL('oauth2')` in your build
+3. Paste the generated `client_id` into `src/lib/drive/driveClient.ts` → `FIREFOX_CLIENT_ID`
+
+Without a Client ID, the extension works fully offline; only the Drive connection button will prompt you to contact the developer.
+
+---
+
+## Verification
 
 ```bash
-npm run typecheck
-npm test
-npm run build:chrome
+npm run typecheck   # TypeScript type check
+npm test            # Unit tests (Vitest)
+npm run build:chrome  # Smoke-check the production build
 ```
 
-## 隐私
+---
 
-LeLe Tab v1 不做遥测，不上传用户行为数据。默认数据保存在浏览器本地存储中。用户主动启用 Google Drive 同步时，扩展只使用 `https://www.googleapis.com/auth/drive.file` scope 访问由扩展创建或用户选择的文件，文件默认位于 `/LeLe Tab/`，包括：
+## Project Structure
 
-- `bookmarks.html`
-- `calendar.json`
-- `todos.json`
-- `settings.json`
-- `archived-tabs.json`
+```
+src/
+├── background/     # Service worker (SW) — tab events, Drive auto-sync
+├── lib/
+│   ├── bookmarks/  # Netscape HTML bookmark parser / serializer
+│   ├── calendar/   # Solar terms, holidays, bazi calculation
+│   ├── drive/      # Google Drive API client
+│   ├── weather/    # Open-Meteo API client
+│   ├── storage/    # Typed browser storage wrapper
+│   ├── browserApi  # Unified Chrome / Firefox API shim
+│   ├── i18n        # zh-CN / en message catalogue
+│   └── types       # Shared TypeScript types and default settings
+├── newtab/         # New-tab page (React entry)
+├── options/        # Extension options page (React entry)
+├── styles/         # Global CSS
+└── theme/          # Design tokens (CSS custom properties)
+```
 
-天气功能会向 Open-Meteo 请求天气数据。若用户允许浏览器定位，坐标仅用于天气查询，不会被扩展额外上报或保存为行为数据。
+---
+
+## Privacy
+
+LeLe Tab collects no telemetry and uploads no user behavior data.
+
+- All data is stored locally by default.
+- Google Drive sync is opt-in. When enabled, the extension uses only the `drive.file` scope, which limits access to files it created. Files are stored under `/LeLe Tab/` on the user's own Drive.
+- Weather requests are sent to Open-Meteo. If the user grants geolocation permission, coordinates are used only for the weather query and are not stored or reported by the extension.
+
+---
+
+## License
+
+MIT
