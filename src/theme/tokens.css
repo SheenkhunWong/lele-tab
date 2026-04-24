@@ -1,0 +1,118 @@
+/* ──────────────────────────────────────────────────
+   LeLe Tab — Design tokens  (Claude-style palette)
+   ────────────────────────────────────────────────── */
+
+:root {
+  /* Typography */
+  --font-sans:
+    "Söhne", "Inter", system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif:
+    "Tiempos Headline", "Source Serif Pro",
+    "Georgia", serif;
+  --font-mono:
+    "Berkeley Mono", "JetBrains Mono",
+    ui-monospace, "Cascadia Code", monospace;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.25, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --motion: 160ms var(--ease-out);
+  --motion-slow: 260ms var(--ease-out);
+  --motion-spring: 240ms var(--ease-spring);
+
+  /* Geometry */
+  --radius-card: 16px;
+  --radius-control: 10px;
+  --radius-sm: 7px;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-xs:   0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:   0 1px 3px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.05);
+  --shadow-md:   0 2px 6px rgba(0,0,0,0.07), 0 6px 20px rgba(0,0,0,0.06);
+  --shadow-lg:   0 4px 12px rgba(0,0,0,0.08), 0 16px 40px rgba(0,0,0,0.08);
+  --shadow-inset: inset 0 1px 3px rgba(0,0,0,0.06);
+
+  /* Focus */
+  --focus-ring: 0 0 0 3px color-mix(in oklab, var(--accent) 30%, transparent);
+}
+
+/* ── Light mode ── */
+:root[data-theme='light'] {
+  --bg:              #f5f1eb;
+  --bg-alt:          #ede9e0;
+  --bg-gradient:
+    radial-gradient(ellipse 90% 55% at 50% -8%,  rgba(217,119,87,.10) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 90% at -8% 85%,  rgba(217,119,87,.05) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 70% at 108% 60%, rgba(217,119,87,.04) 0%, transparent 55%);
+
+  --surface:         #faf9f5;
+  --surface-raised:  #ffffff;
+  --surface-hover:   #f7f5f0;
+
+  --text:            #1c1917;
+  --text-2:          #44403c;
+  --muted:           #78716c;
+
+  --border:          rgba(28,25,23,.09);
+  --border-md:       rgba(28,25,23,.14);
+  --border-strong:   rgba(28,25,23,.20);
+
+  --accent:          #d97757;
+  --accent-2:        #c96a46;
+  --accent-dim:      rgba(217,119,87,.12);
+  --accent-glow:     rgba(217,119,87,.18);
+
+  --success:         #4a7c59;
+  --danger:          #b84b45;
+  --danger-dim:      rgba(184,75,69,.10);
+
+  --input-bg:        #ffffff;
+  --input-border:    rgba(28,25,23,.15);
+  --scrollbar:       rgba(28,25,23,.16);
+}
+
+/* ── Dark mode ── */
+:root[data-theme='dark'] {
+  --bg:              #1a1917;
+  --bg-alt:          #211f1d;
+  --bg-gradient:
+    radial-gradient(ellipse 90% 55% at 50% -8%,  rgba(224,128,96,.08) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 90% at -8% 85%,  rgba(224,128,96,.04) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 70% at 108% 60%, rgba(224,128,96,.03) 0%, transparent 55%);
+
+  --surface:         #242220;
+  --surface-raised:  #2d2b28;
+  --surface-hover:   #302d2a;
+
+  --text:            #f5f0e8;
+  --text-2:          #c8bfb5;
+  --muted:           #9c9189;
+
+  --border:          rgba(245,240,232,.08);
+  --border-md:       rgba(245,240,232,.13);
+  --border-strong:   rgba(245,240,232,.20);
+
+  --accent:          #e08060;
+  --accent-2:        #f09070;
+  --accent-dim:      rgba(224,128,96,.14);
+  --accent-glow:     rgba(224,128,96,.20);
+
+  --success:         #6a9e74;
+  --danger:          #d97070;
+  --danger-dim:      rgba(217,112,112,.12);
+
+  --input-bg:        #1e1c1a;
+  --input-border:    rgba(245,240,232,.13);
+  --scrollbar:       rgba(245,240,232,.16);
+}
+
+/* Disable motion globally when requested */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion:        0ms linear;
+    --motion-slow:   0ms linear;
+    --motion-spring: 0ms linear;
+  }
+}

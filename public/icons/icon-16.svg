@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" role="img" aria-label="LeLe Tab">
+  <rect width="16" height="16" rx="4" fill="#F5F1EB"/>
+  <path d="M4 3.5h2v7h4.8v2H4z" fill="#1F1E1D"/>
+  <circle cx="11.5" cy="4.5" r="1.7" fill="#D97757"/>
+</svg>

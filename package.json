@@ -1,0 +1,43 @@
+{
+  "name": "lele-tab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "LeLe Tab browser new-tab dashboard extension.",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "npm run build:chrome",
+    "build:chrome": "node scripts/build.mjs chrome",
+    "build:firefox": "node scripts/build.mjs firefox",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.4",
+    "vite": "^7.1.7",
+    "typescript": "^5.9.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "lucide-react": "^0.468.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/chrome": "^0.0.315",
+    "@types/node": "^24.5.2",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitest/coverage-v8": "^3.2.4",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^15.15.0",
+    "jsdom": "^27.0.0",
+    "prettier": "^3.6.2",
+    "vitest": "^3.2.4"
+  }
+}
